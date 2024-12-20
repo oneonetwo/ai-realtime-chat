@@ -1,0 +1,14 @@
+{
+  "watch": [
+    "bin/",
+    "routes/",
+    "app.js",
+    "public/",
+    "views/"
+  ],
+  "ext": "js,json,jade,css",
+  "ignore": [
+    "node_modules/",
+    ".git/"
+  ]
+} 
