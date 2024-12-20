@@ -1,29 +1,36 @@
 export class AudioRecorder {
   private mediaRecorder: MediaRecorder | null = null;
-  private audioChunks: Blob[] = [];
+  private audioContext: AudioContext | null = null;
+  private stream: MediaStream | null = null;
+  private audioTrack: MediaStreamTrack | null = null;
 
-  async startRecording({ onAudioData, onError }: {
-    onAudioData: (data: Blob) => void;
-    onError: (error: string) => void;
-  }) {
+  async startRecording(config: AudioConfig) {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      this.mediaRecorder = new MediaRecorder(stream);
-      
-      this.mediaRecorder.ondataavailable = (event) => {
-        if (event.data.size > 0) {
-          onAudioData(event.data);
+      this.stream = await navigator.mediaDevices.getUserMedia({
+        audio: {
+          echoCancellation: true,
+          noiseSuppression: true,
+          sampleRate: 44100
         }
+      });
+
+      this.audioTrack = this.stream.getAudioTracks()[0];
+      this.audioContext = new AudioContext();
+      const source = this.audioContext.createMediaStreamSource(this.stream);
+      const processor = this.audioContext.createScriptProcessor(1024, 1, 1);
+
+      processor.onaudioprocess = (e) => {
+        const inputData = e.inputBuffer.getChannelData(0);
+        config.onAudioData(inputData);
       };
 
-      this.mediaRecorder.onerror = () => {
-        onError('录音出错');
-      };
+      source.connect(processor);
+      processor.connect(this.audioContext.destination);
 
-      this.mediaRecorder.start(100); // 每100ms触发一次ondataavailable事件
+      return this.audioTrack;
     } catch (error) {
-      onError('无法访问麦克风');
-      throw error;
+      config.onError('无法访问麦克风：' + error);
+      return null;
     }
   }
 
