@@ -1,0 +1,62 @@
+<!--
+ * @Author: yangjingyuan yangjingyuan@pwrd.com
+ * @Date: 2024-12-20 16:53:58
+ * @LastEditors: yangjingyuan yangjingyuan@pwrd.com
+ * @LastEditTime: 2024-12-20 17:39:55
+ * @FilePath: \frontend\.cursorrules
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+-->
+
+    You are an expert in TypeScript, Node.js, Vite, Vue.js, Vue Router, Pinia, axios, vant,scss, with a deep understanding of best practices and performance optimization techniques in these technologies.
+  
+    Code Style and Structure
+    - Write concise, maintainable, and technically accurate TypeScript code with relevant examples.
+    - Use functional and declarative programming patterns; avoid classes.
+    - Favor iteration and modularization to adhere to DRY principles and avoid code duplication.
+    - Use descriptive variable names with auxiliary verbs (e.g., isLoading, hasError).
+    - Organize files systematically: each file should contain only related content, such as exported components, subcomponents, helpers, static content, and types.
+  
+    Naming Conventions
+    - Use lowercase with dashes for directories (e.g., components/auth-wizard).
+    - Favor named exports for functions.
+  
+    TypeScript Usage
+    - Use TypeScript for all code; prefer interfaces over types for their extendability and ability to merge.
+    - Avoid enums; use maps instead for better type safety and flexibility.
+    - Use functional components with TypeScript interfaces.
+  
+    Syntax and Formatting
+    - Use the "function" keyword for pure functions to benefit from hoisting and clarity.
+  
+    UI and Styling
+    - Implement responsive design with scss， vant
+    - The style of -scss cannot be written as :deep(.van-cell__value){} Only as :deep{{.van-cell__value}}
+
+    Performance Optimization
+    - Leverage VueUse functions where applicable to enhance reactivity and performance.
+    - Wrap asynchronous components in Suspense with a fallback UI.
+    - Use dynamic loading for non-critical components.
+    - Optimize images: use WebP format, include size data, implement lazy loading.
+    - Implement an optimized chunking strategy during the Vite build process, such as code splitting, to generate smaller bundle sizes.
+  
+    Development requirement
+    <!-- 开发要求 -->
+    1. You can modify and add any file, but give the preparation path and name of the modification, each time you delete the function, you need to ask.
+    <!-- 1. 你可以修改和添加任何文件，但是要给出修改的准备路径和名称，每次删除功能时，需要进行询问。 -->
+    2. Each development requirement should first read the README.md file to understand the development plan and development steps.
+    <!-- 2. 每次开发需求都要首先阅读README.md文件，了解开发计划和开发步骤。 -->
+    3. In the process of requirement development, it is necessary to conduct requirement function analysis, disassemble tasks, formulate development plan and development steps, update to README.md, and mark to be completed and completed.
+    <!-- 3. 进行需求开发时，必须先进行需求功能分析，任务进行拆解，制定开发计划和开发步骤，更新到README.md, 有待完成和完成的标识。 -->
+    4. After the development of individual functions and steps, update the README.md document, add the completion mark, and ask whether git is committed, and generate a commit message
+    <!-- 4. 单个功能和步骤开发完成，更新README.md文档，添加完成标识，并且询问是否提交git, 并且生成commit message -->
+
+
+
+
+
+
+
+   
+
+
+
