@@ -9,24 +9,31 @@
 <script setup lang="ts">
 import { ref, onUnmounted } from 'vue'
 import { useVoiceStore } from '@/stores/voice'
+import { useChatStore } from '@/stores/chat'
 import { AudioRecorder } from '@/utils/audio'
 import { OpenAIClient } from '@/utils/openai-client'
 import { getSessionToken } from '@/services/api'
-import { showNotify  } from 'vant'
+import { showNotify } from 'vant'
+import AudioVisualizer from '@/components/AudioVisualizer.vue'
+import ChatMessage from '@/components/ChatMessage.vue'
 
 const voiceStore = useVoiceStore()
+const chatStore = useChatStore()
 const audioRecorder = new AudioRecorder()
 const openAIClient = new OpenAIClient()
-const responseText = ref('')
+const currentMessage = ref('')
 
 const initializeOpenAI = async () => {
   try {
     const token = await getSessionToken()
-    console.log('token', token)
     await openAIClient.initialize(token, {
       onResponse: (text) => {
-        responseText.value += text
-        voiceStore.setProcessing(false)
+        currentMessage.value += text
+        if (text.includes('[DONE]')) {
+          chatStore.addMessage('assistant', currentMessage.value)
+          currentMessage.value = ''
+          voiceStore.setProcessing(false)
+        }
       },
       onError: (error) => {
         voiceStore.setError(error)
@@ -77,10 +84,22 @@ initializeOpenAI()
 
 <template>
   <div class="home">
-    <div class="response-container" v-if="responseText">
-      <p>{{ responseText }}</p>
+    <div class="chat-container">
+      <template v-for="message in chatStore.messages" :key="message.id">
+        <ChatMessage
+          :type="message.type"
+          :content="message.content"
+        />
+      </template>
+      <ChatMessage
+        v-if="currentMessage"
+        type="assistant"
+        :content="currentMessage"
+      />
     </div>
-    <div class="voice-container">
+    
+    <div class="control-panel">
+      <AudioVisualizer :is-recording="voiceStore.isRecording" />
       <van-button
         :loading="voiceStore.isProcessing"
         :type="voiceStore.isRecording ? 'danger' : 'primary'"
@@ -101,27 +120,22 @@ initializeOpenAI()
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  align-items: center;
   
-  .response-container {
-    margin: 20px;
-    padding: 15px;
-    width: 90%;
-    background: #f5f5f5;
-    border-radius: 8px;
-    
-    p {
-      margin: 0;
-      line-height: 1.5;
-    }
+  .chat-container {
+    flex: 1;
+    padding: 20px 0;
+    overflow-y: auto;
   }
   
-  .voice-container {
-    margin-top: auto;
-    margin-bottom: 40px;
-    padding: 0 20px;
-    width: 100%;
-    box-sizing: border-box;
+  .control-panel {
+    position: sticky;
+    bottom: 0;
+    background: white;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
   }
 }
 </style> 

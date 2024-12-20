@@ -28,9 +28,11 @@ export class OpenAIClient {
         }
       }
        // Add local audio track for microphone input in the browser
+       console.log('navigator.mediaDevices', navigator)
         const ms = await navigator.mediaDevices.getUserMedia({
             audio: true
         });
+        console.log('ms', ms)
         this.pc.addTrack(ms.getTracks()[0]);
 
       // 创建数据通道
